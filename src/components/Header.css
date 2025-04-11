@@ -1,0 +1,13 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+  }
+  
+  .logo img {
+    height: 3em; /* Примерно 40px при стандартном размере шрифта 16px */
+    width: auto;
+  }
+  

@@ -1,0 +1,14 @@
+.paragraph {
+  display: flex;
+  flex-direction: column; /* Элементы вертикально */
+  align-items: center;    /* Центр по горизонтали */
+  justify-content: flex-start; /* Начинаем сверху */
+  min-height: 75vh;
+  padding: 1rem;
+  gap: 2rem; /* Равные отступы между элементами */
+  text-align: left; /* Центр текста внутри элементов */
+  width: 100%;
+  max-width: 50rem; /* Ограничение ширины */
+  margin: 0 auto; /* Авто-отступы по бокам */
+  margin-top: 1rem;
+  }

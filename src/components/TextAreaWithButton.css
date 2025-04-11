@@ -1,0 +1,23 @@
+/* Добавьте эти стили */
+.textarea-with-button {
+    position: relative; /* Ключевое свойство! */
+    width: 100%;
+    display: inline-block; /* Для правильного размещения */
+  }
+  
+  .textarea {
+    width: 100%;
+    padding-right: 3.5rem; /* Место для кнопки справа */
+    box-sizing: border-box; /* Чтобы padding не увеличивал ширину */
+  }
+  
+  .textarea-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 2; /* Чтобы кнопка была поверх текстареа */
+  }
+  
