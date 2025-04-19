@@ -3,7 +3,7 @@ import TextArea from './TextArea';
 import Button from './Button';
 import { useNavigate } from 'react-router-dom';
 
-export default function TextAreaWithButton () {
+export default function TextAreaWithButton (  {rows} ) {
   const navigate = useNavigate();
 
   // Обработчик клика для кнопки
@@ -16,7 +16,7 @@ export default function TextAreaWithButton () {
 
     return (
       <div className="textarea-with-button">
-        <TextArea />
+        <TextArea  rows={rows} />
         <Button className="embedded-button" onClick={handleAnalyzeClick} />
       </div>
     );
