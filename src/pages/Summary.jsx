@@ -13,7 +13,7 @@ function Summary() {
     <div className='paragraph'>
     <h2>Тут будет Суммаризация</h2> 
       <TextAreaWithButton />
-    </div>
+      </div>
     <Footer/>
     </div>
   )

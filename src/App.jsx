@@ -24,7 +24,7 @@ function Home(){
     <div className='paragraph'>
     <h2>Summary AI кратко перескажет видео c YouTube, а также даст список самых повторящихся слов</h2> 
       <TextAreaWithButton />
-    </div>
+      </div>
     <Footer/>
     </div>
   )
