@@ -11,7 +11,7 @@ def download_video(url):
         'format': 'bestvideo[height<=360][ext=mp4]+bestaudio[ext=m4a]/best[height<=360]',
         'outtmpl': 'video.mp4',
         'merge_output_format': 'mp4',
-        'cookiefile': 'cookies.txt',  
+        'cookiefile': '/cookies.txt',  
         'overwrites': True,
         'keepvideo': False,
     }
