@@ -1,6 +1,7 @@
-#!pip install openai-whisper  
+#pip install openai-whisper  
 #pip install ffmpeg-python  
 #pip install yt-dlp
+
 import yt_dlp
 import whisper
 import os
