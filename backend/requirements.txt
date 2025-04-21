@@ -1,4 +1,6 @@
 openai-whisper
 ffmpeg-python 
-yt-dlp
 #npm install react-router-dom
+fastapi
+uvicorn
+pytubefix

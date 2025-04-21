@@ -1,41 +1,60 @@
-#pip install openai-whisper  
-#pip install ffmpeg-python  
-#pip install yt-dlp
-
-import yt_dlp
+from fastapi import FastAPI, Request, HTTPException  # Добавлен HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import whisper
 import os
+from pytubefix import YouTube
+from pytubefix.cli import on_progress
+
+app = FastAPI()
+
+# Настройка CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def download_video(url):
-    ydl_opts = {
-        'format': 'bestvideo[height<=360][ext=mp4]+bestaudio[ext=m4a]/best[height<=360]',
-        'outtmpl': 'video.mp4',
-        'merge_output_format': 'mp4',
-        'cookiefile': '/cookies.txt',  
-        'overwrites': True,
-        'keepvideo': False,
-    }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
+    yt = YouTube(url, on_progress_callback=on_progress)
+    print(yt)
+
+# Получаем поток с разрешением 360p
+    stream = yt.streams.filter(res="360p", file_extension="mp4").first()
+
+    if stream:
+    # Скачиваем видео с указанием имени файла
+        stream.download(filename="video.mp4")
+        print("Видео успешно скачано как video.mp4")
+    else:
+        print("Поток с разрешением 360p не найден")
 
 def transcribe_audio(model_name="base"):
-    model = whisper.load_model(model_name)  # 'tiny', 'base', 'small', 'medium', 'large'
+    model = whisper.load_model(model_name)
     result = model.transcribe("video.mp4")
-    
-    with open("transcription.txt", "w", encoding="utf-8") as f:
-        f.write(result["text"])
-    
-    print("Транскрипция готова! Результат в transcription.txt")
     return result["text"]
 
-if __name__ == "__main__":
-    video_url = "https://www.youtube.com/watch?v=uHgt8giw1LY"
+@app.post("/process_video")
+async def process_video(request: Request):
+    try:
+        data = await request.json()
+        url = data.get("url", "").strip()
+        
+        if not url:
+            raise HTTPException(status_code=400, detail="URL не может быть пустым")
+        
+        if "youtube.com" not in url and "youtu.be" not in url:
+            raise HTTPException(status_code=400, detail="Некорректный URL YouTube")
+
+        print(f"Скачиваем видео: {url}")
+        download_video(url)
+        
+        print("Транскрибируем...")
+        transcription = transcribe_audio()
+        
+        return {"transcription": transcription}
     
-    print("Скачиваем видео...")
-    download_video(video_url)
-    
-    print("Запускаем Whisper...")
-    transcribed_text = transcribe_audio(model_name="base") 
-    
-    print("\nТекст из видео:")
-    print(transcribed_text)
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Ошибка обработки видео: {str(e)}")
