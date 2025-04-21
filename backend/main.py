@@ -19,11 +19,9 @@ def download_video(url):
     yt = YouTube(url, on_progress_callback=on_progress)
     print(yt)
 
-# Получаем поток с разрешением 360p
     stream = yt.streams.filter(res="360p", file_extension="mp4").first()
 
     if stream:
-    # Скачиваем видео с указанием имени файла
         stream.download(filename="video.mp4")
         print("Видео успешно скачано как video.mp4")
     else:

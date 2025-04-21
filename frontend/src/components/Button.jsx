@@ -4,12 +4,12 @@ import './Button.css';
 export default function Button({ className, onClick }) {
   return(
     <button 
-      className={`textarea-button ${className || ''}`} // Объединяем классы
-      onClick={onClick} // Пробрасываем обработчик
+      className={`textarea-button ${className || ''}`} 
+      onClick={onClick} 
     >
       <svg
-        width="30"
-        height="30"
+        width="35"
+        height="35"
         viewBox="0 0 24 24"
         style={{ display: 'block', margin: 'auto' }}
       >
