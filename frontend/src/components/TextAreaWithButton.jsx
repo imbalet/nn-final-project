@@ -1,3 +1,49 @@
+// import { useState } from 'react';
+// import './TextAreaWithButton.css';
+// import TextArea from './TextArea';
+// import Button from './Button';
+// import { useNavigate } from 'react-router-dom';
+
+// export default function TextAreaWithButton({ rows }) {
+//   const [inputValue, setInputValue] = useState('');
+//   const navigate = useNavigate();
+
+//   const handleAnalyzeClick = async () => {
+//     if (!inputValue.trim()) {
+//       alert('Пожалуйста, введите URL YouTube видео');
+//       return;
+//     }
+    
+//     // Переходим сразу на страницу результатов с передачей URL
+//     navigate('/summary', { 
+//       state: { 
+//         videoUrl: inputValue.trim(),
+//         isLoading: true 
+//       } 
+//     });
+//   };
+
+//    // Обработчик нажатия клавиш
+//    const handleKeyPress = (e) => {
+//     if (e.key === 'Enter' && !e.shiftKey) {
+//       e.preventDefault(); // Предотвращаем перенос строки
+//       handleAnalyze();
+//     }
+//   };
+
+//   return (
+//     <div className="textarea-with-button">
+//       <TextArea 
+//         rows={rows}
+//         value={inputValue}
+//         onChange={(value) => setInputValue(value)}
+//         onKeyDown={handleKeyPress} // Добавляем обработчик клавиш
+//       />
+//       <Button onClick={handleAnalyzeClick} />
+//     </div>
+//   );
+// }
+
 import { useState } from 'react';
 import './TextAreaWithButton.css';
 import TextArea from './TextArea';
@@ -8,13 +54,12 @@ export default function TextAreaWithButton({ rows }) {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
 
-  const handleAnalyzeClick = async () => {
+  const handleAnalyze = () => {
     if (!inputValue.trim()) {
       alert('Пожалуйста, введите URL YouTube видео');
       return;
     }
     
-    // Переходим сразу на страницу результатов с передачей URL
     navigate('/summary', { 
       state: { 
         videoUrl: inputValue.trim(),
@@ -23,14 +68,23 @@ export default function TextAreaWithButton({ rows }) {
     });
   };
 
+  // Обработчик нажатия клавиш
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // Предотвращаем перенос строки
+      handleAnalyze();
+    }
+  };
+
   return (
     <div className="textarea-with-button">
       <TextArea 
         rows={rows}
         value={inputValue}
         onChange={(value) => setInputValue(value)}
+        onKeyDown={handleKeyPress} // Добавляем обработчик клавиш
       />
-      <Button onClick={handleAnalyzeClick} />
+      <Button onClick={handleAnalyze} />
     </div>
   );
 }
