@@ -1,3 +1,17 @@
+# Running
+To run **React** frontend in dev mode execute:
+```shell
+cd frontend
+npm install
+npm run dev
+```
+
+To run **FastAPI** backend execute:
+```shell
+pip install -r backend/requirements.txt
+uvicorn backend.app.main:app
+```
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
