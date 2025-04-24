@@ -14,6 +14,7 @@ executor = ProcessPoolExecutor(max_workers=4)
 @router.post("/process_video")
 async def process_video(request: VideoRequest) -> VideoResponse:
     try:
+        path = None
         url = request.url
         if not url:
             raise HTTPException(status_code=400, detail="URL не может быть пустым")
@@ -23,6 +24,9 @@ async def process_video(request: VideoRequest) -> VideoResponse:
 
         path = await asyncio.to_thread(download_video, url)
 
+        if not path.is_file():
+            raise HTTPException(status_code=400, detail="Не удалось загрузить видео")
+
         transcription = await asyncio.get_running_loop().run_in_executor(
             executor, transcribe_audio, path
         )
@@ -30,8 +34,12 @@ async def process_video(request: VideoRequest) -> VideoResponse:
         return VideoResponse(transcription=transcription)
 
     except HTTPException as he:
-        shutil.rmtree(path.parent, ignore_errors=True)
         raise he
     except Exception as e:
-        shutil.rmtree(path.parent, ignore_errors=True)
         raise HTTPException(status_code=500, detail=f"Ошибка обработки видео: {str(e)}")
+    finally:
+        if path:
+            try:
+                shutil.rmtree(path.parent, ignore_errors=True)
+            except Exception as cleanup_error:
+                print(f"Ошибка при удалении временных файлов: {cleanup_error}")
