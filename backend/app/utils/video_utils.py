@@ -35,8 +35,6 @@ def download_video(url: str) -> Path:
         raise e
     except Exception as e:
         raise VideoDownloadError("Unexpected video download error", e) from e
-    finally:
-        shutil.rmtree(path.parent, ignore_errors=True)
     return path
 
 
@@ -44,5 +42,4 @@ def transcribe_audio(path: Path, model_name="base") -> str:
     model = whisper.load_model(model_name)
     result = model.transcribe(str(path))
     shutil.rmtree(path.parent, ignore_errors=True)
-    print(path)
     return result["text"]

@@ -1,9 +1,11 @@
 import asyncio
+import shutil
 from concurrent.futures import ProcessPoolExecutor
 from fastapi.routing import APIRouter
 from fastapi import HTTPException
 from backend.app.schemas.video_request import VideoRequest, VideoResponse
 from backend.app.utils.video_utils import download_video, transcribe_audio
+
 
 router = APIRouter(tags=["video_transcriber"])
 executor = ProcessPoolExecutor(max_workers=4)
@@ -28,6 +30,8 @@ async def process_video(request: VideoRequest) -> VideoResponse:
         return VideoResponse(transcription=transcription)
 
     except HTTPException as he:
+        shutil.rmtree(path.parent, ignore_errors=True)
         raise he
     except Exception as e:
+        shutil.rmtree(path.parent, ignore_errors=True)
         raise HTTPException(status_code=500, detail=f"Ошибка обработки видео: {str(e)}")
