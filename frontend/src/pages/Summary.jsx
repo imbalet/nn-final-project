@@ -3,26 +3,27 @@ import './Summary.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import TextArea from '../components/TextArea';
-import { useLocation } from 'react-router-dom';
+import TextAreaWithButton from '../components/TextAreaWithButton';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Summary() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [transcription, setTranscription] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentUrl, setCurrentUrl] = useState(location.state?.videoUrl || '');
 
   useEffect(() => {
-    const processVideo = async () => {
+    const processVideo = async (url) => {
       try {
-        const videoUrl = location.state?.videoUrl;
-        if (!videoUrl) {
-          throw new Error('URL видео не получен');
-        }
-
+        setIsLoading(true);
+        setError(null);
+        
         const response = await fetch('http://localhost:8000/process_video', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: videoUrl }),
+          body: JSON.stringify({ url }),
         });
 
         if (!response.ok) {
@@ -39,15 +40,31 @@ function Summary() {
       }
     };
 
-    if (location.state?.isLoading) {
-      processVideo();
+    if (location.state?.videoUrl) {
+      processVideo(location.state.videoUrl);
     }
-  }, [location]);
+  }, [location.state?.videoUrl]);
+
+  const handleNewAnalysis = (newUrl) => {
+    navigate('/summary', { 
+      state: { 
+        videoUrl: newUrl,
+        isLoading: true 
+      } 
+    });
+    setCurrentUrl(newUrl);
+  };
 
   return (
     <div>
       <Header />
       <div className='paragraph'>
+        <TextAreaWithButton 
+          rows={1}
+          initialValue={currentUrl}
+          onAnalyze={handleNewAnalysis}
+        />
+        
         {isLoading ? (
           <div className="loading-container">
             <div className="loading-spinner"></div>
