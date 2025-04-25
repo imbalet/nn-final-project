@@ -7,3 +7,6 @@ class VideoRequest(BaseModel):
 
 class VideoResponse(BaseModel):
     transcription: str
+    video_preview: bytes
+    video_title: str
+    url: str

@@ -22,7 +22,7 @@ async def process_video(request: VideoRequest) -> VideoResponse:
         if "youtube.com" not in url and "youtu.be" not in url:
             raise HTTPException(status_code=400, detail="Некорректный URL YouTube")
 
-        path = await asyncio.to_thread(download_video, url)
+        path, metadata = await asyncio.to_thread(download_video, url)
 
         if not path.is_file():
             raise HTTPException(status_code=400, detail="Не удалось загрузить видео")
@@ -31,7 +31,7 @@ async def process_video(request: VideoRequest) -> VideoResponse:
             executor, transcribe_audio, path
         )
 
-        return VideoResponse(transcription=transcription)
+        return VideoResponse(transcription=transcription, **metadata, url=url)
 
     except HTTPException as he:
         raise he

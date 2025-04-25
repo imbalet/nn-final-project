@@ -11,9 +11,17 @@ import shutil
 import re
 
 
+def get_metadata(yt: YouTube) -> dict:
+    preview = yt.thumbnail_url
+    title = yt.title
+    return {"video_preview": preview, "video_title": title}
+
+
 def download_video(url: str) -> Path:
     try:
         yt = YouTube(url)
+        metadata = get_metadata(yt)
+
         stream: Stream = yt.streams.filter(type="audio").order_by("abr").last()
 
         if not stream:
@@ -35,7 +43,7 @@ def download_video(url: str) -> Path:
         raise e
     except Exception as e:
         raise VideoDownloadError("Unexpected video download error", e) from e
-    return path
+    return path, metadata
 
 
 def transcribe_audio(path: Path, model_name="base") -> str:
