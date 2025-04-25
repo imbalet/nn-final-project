@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import TextArea from '../components/TextArea';
 import TextAreaWithButton from '../components/TextAreaWithButton';
 import { useLocation, useNavigate } from 'react-router-dom';
+import TextAreaWithPicture from '../components/TextAreaWithPicture';
 
 function Summary() {
   const location = useLocation();
@@ -13,6 +14,9 @@ function Summary() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentUrl, setCurrentUrl] = useState(location.state?.videoUrl || '');
+  const [videoPreview, setVideoPreview] = useState(null); 
+  const [videoTitle, setVideoTitle] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
 
   useEffect(() => {
     const processVideo = async (url) => {
@@ -33,6 +37,10 @@ function Summary() {
 
         const data = await response.json();
         setTranscription(data.transcription);
+        setVideoPreview(data.video_preview);
+        setVideoTitle(data.video_title);
+        setVideoUrl(data.url);
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -64,6 +72,16 @@ function Summary() {
           initialValue={currentUrl}
           onAnalyze={handleNewAnalysis}
         />
+       {/* {videoPreview && <TextAreaWithPicture videoPreview={videoPreview} />} */}
+
+       {videoPreview && (
+        <TextAreaWithPicture 
+        videoPreview={videoPreview} 
+        videoTitle={videoTitle} 
+        url={videoUrl}
+    />
+)}
+
         
         {isLoading ? (
           <div className="loading-container">
