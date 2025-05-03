@@ -1,9 +1,9 @@
+from dataclasses import asdict
 import json
 from redis.asyncio import Redis
-from schemas.task import Task
-from schemas.result import Result
-from repositories.base_repo import BaseRepo
-from dataclasses import asdict
+from repositories import BaseRepo
+from schemas import Task
+from schemas import Result
 
 GET_TASK_SCRIPT = """
 local task_id = redis.call('LPOP', KEYS[1])

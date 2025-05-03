@@ -1,6 +1,6 @@
 from abc import ABC
-from schemas.task import Task
-from schemas.result import Result
+from schemas import Task
+from schemas import Result
 
 
 class BaseRepo(ABC):

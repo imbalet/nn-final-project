@@ -1,13 +1,14 @@
-import signal
 import asyncio
-from repositories.db_repo import RedisRepo
+from concurrent.futures import ProcessPoolExecutor
 from dotenv import load_dotenv
 import os
+import signal
+
+from repositories import RedisRepo
 from video_processor.processor import process_video
-from services.model import SummarizeService
-from schemas.task import Task
-from schemas.result import Result
-from concurrent.futures import ProcessPoolExecutor
+from services import SummarizeService
+from schemas import Task
+from schemas import Result
 
 MAX_CONCURRENT = 3
 

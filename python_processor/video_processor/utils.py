@@ -1,15 +1,16 @@
-import whisper
+from pathlib import Path
 from pytubefix import YouTube, Stream
 from pytubefix.exceptions import VideoUnavailable, RegexMatchError
-from video_processor.exceptions.video_exceptions import (
+import re
+import shutil
+import whisper
+from tempfile import mkdtemp
+
+from exceptions import (
     VideoDownloadError,
     VideoUnavailableError,
 )
-from schemas.metadata import Metadata
-from tempfile import mkdtemp
-from pathlib import Path
-import shutil
-import re
+from schemas import Metadata
 
 
 def get_metadata(yt: YouTube) -> Metadata:

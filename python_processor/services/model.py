@@ -6,7 +6,7 @@ import re
 from sentence_transformers import SentenceTransformer
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 
-from schemas.stamp import Stamp, ExtendedStamp
+from schemas import Stamp, ExtendedStamp
 
 nltk.download("punkt_tab")
 
@@ -161,7 +161,7 @@ class SummarizeService:
     def format_stamps(stamps: list[Stamp]) -> str:
         return "\n".join(
             map(
-                lambda x: f"{SummarizeService.format_time(int(x.start))} - {SummarizeService.format_time(int(x.end))}: {x.text}",
+                lambda x: f"{SummarizeService.format_time(int(x.start))} - {SummarizeService.format_time(int(x.end))}: {x.text}",  # noqa
                 stamps,
             )
         )

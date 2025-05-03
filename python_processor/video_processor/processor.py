@@ -1,9 +1,10 @@
 from dataclasses import asdict
 import json
 from pytubefix import YouTube
-from services.model import SummarizeService
-from schemas.task import Task
-from schemas.result import Result
+
+from services import SummarizeService
+from schemas import Task
+from schemas import Result
 from video_processor.utils import get_metadata, download_video, transcribe_audio
 
 
