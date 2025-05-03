@@ -1,16 +1,20 @@
+from dataclasses import asdict
+import json
+from pytubefix import YouTube
+from services.model import SummarizeService
 from schemas.task import Task
 from schemas.result import Result
 from video_processor.utils import get_metadata, download_video, transcribe_audio
-from pytubefix import YouTube
 
 
-def process_video(task: Task) -> Result:
+def process_video(task: Task, summarizer: SummarizeService) -> Result:
     try:
         youtube = YouTube(task.url)
         metadata = get_metadata(youtube)
         path = download_video(youtube)
         result = transcribe_audio(path)
-        text = result["text"]
+        stamps = summarizer.summarize_video(result)
+        text = json.dumps([asdict(i) for i in stamps], ensure_ascii=False)
 
         return Result(
             id=task.id,

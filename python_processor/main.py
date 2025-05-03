@@ -4,6 +4,7 @@ from repositories.db_repo import RedisRepo
 from dotenv import load_dotenv
 import os
 from video_processor.processor import process_video
+from services.model import SummarizeService
 from schemas.task import Task
 from schemas.result import Result
 from concurrent.futures import ProcessPoolExecutor
@@ -20,16 +21,18 @@ def load_dotenv_data():
     port = os.getenv("REDIS_PORT")
     password = os.getenv("REDIS_PASSWORD")
     max_concurrent = int(os.getenv("MAX_CONCURRENT"))
-    return host, port, password, max_concurrent
+    model_path = os.getenv("MODEL_PATH")
+    return host, port, password, max_concurrent, model_path
 
 
 redis_repo: RedisRepo | None = None
+summarize_service: SummarizeService | None = None
 
 
 async def process_task(task: Task) -> Result:
     try:
         res = await asyncio.get_running_loop().run_in_executor(
-            executor, process_video, task
+            executor, process_video, task, summarize_service
         )
         return res
     except Exception as e:
@@ -76,9 +79,9 @@ def handle_signal():
 
 
 async def main():
-    global redis_repo, MAX_CONCURRENT, sem
+    global redis_repo, MAX_CONCURRENT, sem, summarize_service
 
-    host, port, password, max_concurrent = load_dotenv_data()
+    host, port, password, max_concurrent, model_path = load_dotenv_data()
     MAX_CONCURRENT = max_concurrent
     sem = asyncio.Semaphore(MAX_CONCURRENT)
 
@@ -91,6 +94,7 @@ async def main():
         processing_key="processing",
         done_key="done",
     )
+    summarize_service = SummarizeService(model_path)
 
     loop = asyncio.get_running_loop()
     loop.add_signal_handler(signal.SIGINT, handle_signal)
