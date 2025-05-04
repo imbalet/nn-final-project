@@ -40,7 +40,12 @@ func (h *Handler) Process(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id := getIdFromLink(data.Url)
+	id, found := getIdFromLink(data.Url)
+	if !found {
+		http.Error(w, "Wrong link passed", http.StatusBadRequest)
+		return
+	}
+
 	exists, err := h.videoService.IsVideoExists(id)
 
 	if err != nil {
