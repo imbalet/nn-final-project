@@ -132,6 +132,21 @@ func TransferTask(rdb *redis.Client, sqlRepo interfaces.PostgresRepository) {
 	}
 }
 
+func enableCORS(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	}
+}
+
 func main() {
 	serverPort, exists := os.LookupEnv("SERVER_PORT")
 	if !exists {
@@ -150,8 +165,8 @@ func main() {
 
 	videoService := service.NewVideoService(sqlRepo, redisRepo, cacheRepo)
 	handlers := handler.NewHandlers(videoService)
-	http.HandleFunc("/process", handlers.Process)
-	http.HandleFunc("/video/", handlers.GetVideoData)
+	http.HandleFunc("/process", enableCORS(handlers.Process))
+	http.HandleFunc("/video/", enableCORS(handlers.GetVideoData))
 	http.ListenAndServe(fmt.Sprintf(":%s", serverPort), nil)
 
 }
