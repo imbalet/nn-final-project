@@ -121,7 +121,6 @@ func TransferTask(rdb *redis.Client, sqlRepo interfaces.PostgresRepository) {
 
 		if taskResult.Status == "error" {
 			log.Printf("Error on task: %+v", taskResult)
-			continue
 		}
 
 		err = sqlRepo.UpdateRow(taskResult)
