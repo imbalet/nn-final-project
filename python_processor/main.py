@@ -1,7 +1,7 @@
 import asyncio
-from concurrent.futures import ProcessPoolExecutor
 from dotenv import load_dotenv
 import os
+from pebble import ProcessPool
 import signal
 
 from repositories import RedisRepo
@@ -13,7 +13,7 @@ from schemas import Result
 MAX_CONCURRENT = 3
 
 sem = asyncio.Semaphore(MAX_CONCURRENT)
-executor = ProcessPoolExecutor()
+executor = ProcessPool()
 
 
 def load_dotenv_data():
@@ -33,11 +33,21 @@ summarize_service: SummarizeService | None = None
 async def process_task(task: Task) -> Result:
     try:
         res = await asyncio.get_running_loop().run_in_executor(
-            executor, process_video, task, summarize_service
+            executor, process_video, 0, task, summarize_service
         )
         return res
     except Exception as e:
         print(f"Error processing {task}: {e}")
+    except asyncio.CancelledError:
+        await redis_repo.set_result(
+            Result(
+                id=task.id,
+                title="",
+                preview_link="",
+                status="error",
+                summary="",
+            )
+        )
     finally:
         sem.release()
 
@@ -53,21 +63,29 @@ def sync_callback(future: asyncio.Future):
 
 
 async def worker_loop():
-    while True:
-        await sem.acquire()
-        task: Task = await redis_repo.get_task()
-        if task:
-            fut = asyncio.create_task(process_task(task))
-            fut.add_done_callback(sync_callback)
-        else:
-            sem.release()
-            await asyncio.sleep(0.5)
+    try:
+        while True:
+            await sem.acquire()
+            task: Task = await redis_repo.get_task()
+            if task:
+                fut = asyncio.create_task(process_task(task))
+                fut.add_done_callback(sync_callback)
+            else:
+                sem.release()
+                await asyncio.sleep(0.5)
+    except asyncio.CancelledError:
+        print("loop stopped")
 
 
 async def graceful_shutdown():
     print("\nInitiating shutdown...")
 
+    executor.stop()
+    executor.join()
+
     tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+    for i in tasks:
+        i.cancel()
     await asyncio.gather(*tasks, return_exceptions=True)
 
     if redis_repo is not None:
@@ -97,9 +115,9 @@ async def main():
     )
     summarize_service = SummarizeService(model_path)
 
-    # loop = asyncio.get_running_loop()
-    # loop.add_signal_handler(signal.SIGINT, handle_signal)
-    # loop.add_signal_handler(signal.SIGTERM, handle_signal)
+    loop = asyncio.get_running_loop()
+    loop.add_signal_handler(signal.SIGINT, handle_signal)
+    loop.add_signal_handler(signal.SIGTERM, handle_signal)
     await worker_loop()
 
 
