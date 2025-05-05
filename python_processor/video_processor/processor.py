@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 import json
 from pytubefix import YouTube
@@ -10,7 +11,12 @@ from video_processor.utils import get_metadata, download_video, transcribe_audio
 
 def process_video(task: Task, summarizer: SummarizeService) -> Result:
     try:
-        youtube = YouTube(task.url)
+        with ThreadPoolExecutor() as executor:
+            future = executor.submit(YouTube, task.url)
+            youtube = future.result(timeout=5)
+            future = executor.submit(lambda: youtube.streams)
+            future.result(timeout=10)
+
         metadata = get_metadata(youtube)
         path = download_video(youtube)
         result = transcribe_audio(path)
@@ -24,7 +30,8 @@ def process_video(task: Task, summarizer: SummarizeService) -> Result:
             status="done",
             summary=text,
         )
-    except Exception:
+    except Exception as e:
+        print(e)
         return Result(
             id=task.id,
             title="",

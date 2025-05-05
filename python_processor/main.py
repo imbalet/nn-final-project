@@ -97,11 +97,12 @@ async def main():
     )
     summarize_service = SummarizeService(model_path)
 
-    loop = asyncio.get_running_loop()
-    loop.add_signal_handler(signal.SIGINT, handle_signal)
-    loop.add_signal_handler(signal.SIGTERM, handle_signal)
+    # loop = asyncio.get_running_loop()
+    # loop.add_signal_handler(signal.SIGINT, handle_signal)
+    # loop.add_signal_handler(signal.SIGTERM, handle_signal)
     await worker_loop()
 
 
 if __name__ == "__main__":
+    print("starting")
     asyncio.run(main())
