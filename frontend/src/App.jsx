@@ -11,21 +11,21 @@ import Summary from './pages/Summary.jsx'
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home/>} />
-      <Route path="/summary" element={<Summary />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/video/:id/summary" element={<Summary />} />
     </Routes>
   )
 }
 
-function Home(){
+function Home() {
   return (
     <div>
-    <Header />
-    <div className='paragraph'>
-    <h2>Summary AI кратко перескажет видео c YouTube, а также даст список самых повторящихся слов</h2> 
-      <TextAreaWithButton />
+      <Header />
+      <div className='paragraph'>
+        <h2>Summary AI кратко перескажет видео c YouTube</h2>
+        <TextAreaWithButton />
       </div>
-    <Footer/>
+      <Footer />
     </div>
   )
 }

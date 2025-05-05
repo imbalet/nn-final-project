@@ -6,22 +6,24 @@ export default function Header() {
     const navigate = useNavigate();
 
     const handleLogoClick = () => {
-        navigate('/'); 
+        navigate('/');
     };
 
     return (
         <header className="header">
-            <h1 
-                className="clickable-title" 
+            <h1
+                className="clickable-title"
                 onClick={handleLogoClick}
                 style={{ cursor: 'pointer' }}
             >
                 Summary AI
             </h1>
             <div className="logo">
-                <img 
-                    src={logo} 
-                    alt="Logo" 
+                <img
+                    src={logo}
+                    alt="Logo"
+                    onClick={handleLogoClick}
+                    style={{ cursor: 'pointer' }}
                 />
             </div>
         </header>
