@@ -17,4 +17,4 @@ COPY --from=builder /app/bin/app /app/app
 
 EXPOSE 8000
 
-CMD ["/app/app"]
+ENTRYPOINT ["/app/app"]

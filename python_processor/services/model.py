@@ -1,4 +1,3 @@
-import nltk
 import numpy as np
 import os
 from razdel import sentenize
@@ -7,8 +6,6 @@ from sentence_transformers import SentenceTransformer
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 from schemas import Stamp, ExtendedStamp
-
-nltk.download("punkt_tab")
 
 
 class TextSplitter:
