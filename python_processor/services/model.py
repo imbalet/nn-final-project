@@ -1,5 +1,5 @@
-import numpy as np
 import os
+import numpy as np
 from razdel import sentenize
 import re
 from sentence_transformers import SentenceTransformer
@@ -104,19 +104,43 @@ class TextSplitter:
 class TextProcessor:
 
     def __init__(
-        self, threshold: float = 0.3, window_size: int = 3, model_path="./model"
+        self,
+        threshold: float = 0.3,
+        window_size: int = 3,
+        model_path="./model",
     ):
         self.splitter = TextSplitter(threshold=threshold, window_size=window_size)
         self.tokenizer = T5Tokenizer.from_pretrained(model_path)
         self.model = T5ForConditionalGeneration.from_pretrained(model_path)
         self.model.eval()
 
+        self.spell_correct_model = T5ForConditionalGeneration.from_pretrained(
+            "UrukHan/t5-russian-spell"
+        )
+        self.spell_correct_model.eval()
+
+    def spell_correct(self, text: str) -> str:
+        inputs = self.tokenizer(
+            f"Spell correct: {text}", return_tensors="pt", padding="longest"
+        )
+        outputs = self.spell_correct_model.generate(
+            input_ids=inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],
+            max_length=256,
+        )
+        return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
     def process_chunk(self, chunk: Stamp) -> Stamp:
-        inputs = self.tokenizer(chunk.text, return_tensors="pt")
+        chunk.text = self.spell_correct(chunk.text)
+        inputs = self.tokenizer(f"Summarize: {chunk.text}", return_tensors="pt")
         outputs = self.model.generate(
             input_ids=inputs["input_ids"],
             attention_mask=inputs["attention_mask"],
-            max_length=512,
+            max_length=128,
+            length_penalty=2.0,
+            num_beams=4,
+            early_stopping=True,
+            repetition_penalty=1.3,
         )
         return Stamp(
             start=chunk.start,
