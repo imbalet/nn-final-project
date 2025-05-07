@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"go_backend/internal/repository/interfaces"
 	"go_backend/internal/schemas"
-	"go_backend/internal/utils"
 )
 
 type VideoService struct {
@@ -26,15 +25,15 @@ func NewVideoService(
 	}
 }
 
-func (serv *VideoService) IsVideoExists(taskID string) (bool, error) {
-	_, exists, err := serv.sqlRepo.GetRowWithID(taskID)
+func (serv *VideoService) IsVideoExists(taskID string) (bool, string, error) {
+	data, exists, err := serv.sqlRepo.GetRowWithID(taskID)
 	if err != nil {
-		return false, fmt.Errorf("unexpected error on getting task, %w", err)
+		return false, "", fmt.Errorf("unexpected error on getting task, %w", err)
 	}
 	if !exists {
-		return false, nil
+		return false, "", nil
 	}
-	return true, nil
+	return true, data.Status, nil
 }
 
 func (serv *VideoService) GetVideoFromSQL(taskID string) (schemas.VideoData, error) {
@@ -68,12 +67,7 @@ func (serv *VideoService) GetVideoData(videoID string) (schemas.VideoData, bool,
 }
 
 func (serv *VideoService) AddVideoToDatabase(data schemas.VideoData) error {
-	columns, values, err := utils.GetStructFields(data, "db")
-	if err != nil {
-		return fmt.Errorf("error in passed struct, %w", err)
-	}
-
-	err = serv.sqlRepo.InsertRow(columns, values)
+	err := serv.sqlRepo.InsertRow(data)
 	if err != nil {
 		return fmt.Errorf("error on inserting data, %w", err)
 	}

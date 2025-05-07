@@ -51,13 +51,10 @@ func (rep *postgresRepo) GetRowWithID(id string) (schemas.VideoData, bool, error
 	return data, true, nil
 }
 
-func (rep *postgresRepo) InsertRow(columns []string, values []interface{}) error {
-	if len(columns) != len(values) {
-		return fmt.Errorf(
-			"количество столбцов (%d) и значений (%d) не совпадает",
-			len(columns),
-			len(values),
-		)
+func (rep *postgresRepo) InsertRow(data schemas.VideoData) error {
+	columns, values, err := utils.GetStructFields(data, "db")
+	if err != nil {
+		return fmt.Errorf("error in passed struct, %w", err)
 	}
 
 	quotedTable := pq.QuoteIdentifier(rep.table)
@@ -71,14 +68,24 @@ func (rep *postgresRepo) InsertRow(columns []string, values []interface{}) error
 		placeholders[i] = fmt.Sprintf("$%d", i+1)
 	}
 
-	query := fmt.Sprintf(
-		"INSERT INTO %s (%s) VALUES (%s)",
+	setStatements := make([]string, 0, len(columns))
+	for _, col := range columns {
+		setStatements = append(setStatements, fmt.Sprintf("%s = EXCLUDED.%s", col, col))
+	}
+
+	query := fmt.Sprintf(`
+        INSERT INTO %s (%s)
+        VALUES (%s)
+        ON CONFLICT (%s) 
+        DO UPDATE SET %s`,
 		quotedTable,
-		strings.Join(quotedColumns, ", "),
+		strings.Join(columns, ", "),
 		strings.Join(placeholders, ", "),
+		rep.idColumn,
+		strings.Join(setStatements, ", "),
 	)
 
-	_, err := rep.DB.Exec(query, values...)
+	_, err = rep.DB.Exec(query, values...)
 	return err
 }
 

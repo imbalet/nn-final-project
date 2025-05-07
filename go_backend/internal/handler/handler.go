@@ -46,14 +46,14 @@ func (h *Handler) Process(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	exists, err := h.videoService.IsVideoExists(id)
+	exists, status, err := h.videoService.IsVideoExists(id)
 
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	if !exists {
+	if !exists || status == "error" {
 		err = h.videoService.AddVideoToDatabase(schemas.VideoData{
 			Id:        id,
 			CreatedAt: time.Now(),
