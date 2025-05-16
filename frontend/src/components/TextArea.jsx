@@ -1,6 +1,6 @@
 import './TextArea.css'
 
-export default function TextArea({ rows = 5, cols = 33, placeholder, onChange, value, onKeyDown }) {
+export default function TextArea({ rows = 1, cols = 33, placeholder, onChange, value, onKeyDown }) {
   return (
     <textarea
       className='textarea'
