@@ -11,13 +11,13 @@ export default function SummaryDisplay({ transcription }) {
 
     return (
         <div className="summary-display">
-            <h2>Саммари</h2>
+            <h2 className="summary-title">Саммари</h2>
             <ul className="summary-list">
                 {transcription?.map((item, index) => (
                     <li key={index} className="summary-item">
-                        <div className="summary-time">
+                        <p className="summary-time">
                             {formatTime(item.start)} - {formatTime(item.end)}
-                        </div>
+                        </p>
                         <p className="summary-text">{item.text}</p>
                     </li>
                 ))}

@@ -72,11 +72,11 @@ function Summary() {
 
 
   return (
-    <div>
+    <div className='app-container'>
       <Header />
       <div className='paragraph'>
         <TextAreaWithButton
-          rows={1}
+          rows={2}
           initialValue={currentUrl}
         />
 

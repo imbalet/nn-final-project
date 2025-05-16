@@ -23,7 +23,7 @@ export default function TextAreaWithPicture({ videoPreview, videoTitle, url }) {
                 />
             )}
             <div className='video-title'>
-                <h3>{videoTitle}</h3>
+                <h2>{videoTitle}</h2>
             </div>
         </div>
     );

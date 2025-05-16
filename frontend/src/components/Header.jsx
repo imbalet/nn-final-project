@@ -20,10 +20,10 @@ export default function Header() {
             </h1>
             <div className="logo">
                 <img
+                    className="logo-image"
                     src={logo}
                     alt="Logo"
                     onClick={handleLogoClick}
-                    style={{ cursor: 'pointer' }}
                 />
             </div>
         </header>

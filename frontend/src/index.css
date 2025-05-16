@@ -1,37 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
 
 :root {
-  --font-heading: 'Ubuntu', sans-serif;    
-  --font-subheading: 'Ubuntu', sans-serif; 
+  --font-heading: 'Ubuntu', sans-serif;
+  --font-subheading: 'Ubuntu', sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background-color);
 }
 
 h1 {
   font-family: var(--font-heading, 'Ubuntu'), sans-serif;
-  font-weight: 700; 
+  font-weight: 700;
 }
 
-h2, h3 {
+h2,
+h3 {
   font-family: var(--font-heading, 'Ubuntu'), sans-serif;
-  font-weight: 700; /* Ubuntu не имеет 900 веса, максимальный - 700 */
+  font-weight: 700;
 }
 
-h4, h5, h6 {
+h4,
+h5,
+h6 {
   font-family: var(--font-subheading, 'Ubuntu'), sans-serif;
-  font-weight: 500; /* Изменил с 600 на 500, так как Ubuntu имеет веса 300,400,500,700 */
+  font-weight: 500;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   line-height: 1.2;
 }
 
 p {
   font-family: var(--font-subheading, 'Ubuntu'), sans-serif;
-  font-weight: 400; /* Изменил с 600 на 400 для лучшей читаемости */
-}
-
-
-img{
-  width: 2.1rem;
-  height: 2.1rem;
+  font-weight: 400;
 }

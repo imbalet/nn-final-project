@@ -1,12 +1,19 @@
 .textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  color: var(--text-color);
+}
+
+.textarea-text {
+  width: 100%;
   resize: none;
   border-radius: 1em;
-  background-color: rgb(231, 231, 231);
-  font-family: var(--font-subheading, 'Overpass'), sans-serif;
+  background-color: var(--secondary-color);
+  font-family: var(--font-subheading, 'Ubuntu'), sans-serif;
   font-weight: 700;
-  padding: 0.85rem 1rem; 
   font-size: 1.4rem;
+  padding: 0.85rem 1rem;
   border: none;
   outline: none;
-  width: 100%; 
+  color: var(--text-color);
 }

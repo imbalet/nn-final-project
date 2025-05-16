@@ -1,14 +1,13 @@
 import img from '/src/assets/button.svg';
+import './Button.css';
 
-// Добавляем пропсы className и onClick
 export default function Button({ className, onClick }) {
-  return(
-    <button 
-      className={`textarea-button ${className || ''}`} 
-      onClick={onClick} 
+  return (
+    <button
+      className={`textarea-button ${className || ''}`}
+      onClick={onClick}
     >
-
-    <img src={img} className='but'></img>
+      <img src={img} className='confirm-button'></img>
     </button>
   );
 }

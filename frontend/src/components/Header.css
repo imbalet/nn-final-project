@@ -1,13 +1,16 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #fff;
-  }
-  
-  .logo img {
-    height: 3em; /* Примерно 40px при стандартном размере шрифта 16px */
-    width: auto;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--background-color);
+  width: 100%;
+  box-sizing: border-box;
+  color: var(--text-color);
+}
+
+.logo-image {
+  height: 3em;
+  width: auto;
+  cursor: pointer;
+}

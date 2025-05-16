@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import './components/Header.jsx'
 import Header from './components/Header.jsx'
-import './components/TextArea.jsx'
 import Footer from './components/Footer.jsx'
 import TextAreaWithButton from './components/TextAreaWithButton.jsx'
 import Summary from './pages/Summary.jsx'
@@ -19,7 +18,7 @@ function App() {
 
 function Home() {
   return (
-    <div>
+    <div className='app-container'>
       <Header />
       <div className='paragraph'>
         <h1>Summary AI кратко перескажет видео c YouTube</h1>

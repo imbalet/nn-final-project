@@ -68,19 +68,21 @@ export default function TextAreaWithButton({ rows, initialValue = '' }) {
   };
 
   return (
-    <div className="textarea-with-button">
-      <TextArea
-        rows={rows}
-        value={inputValue}
-        onChange={(value) => {
-          setInputValue(value);
-          const isValid = validateUrl(value);
-          setError(isValid ? null : 'Пожалуйста, введите корректный URL YouTube видео');
-        }}
-        onKeyDown={handleKeyPress}
-      />
+    <div className="textarea-with-button-container">
+      <div className="textarea-with-button">
+        <TextArea
+          rows={rows}
+          value={inputValue}
+          onChange={(value) => {
+            setInputValue(value);
+            const isValid = validateUrl(value);
+            setError(isValid ? null : 'Пожалуйста, введите корректный URL YouTube видео');
+          }}
+          onKeyDown={handleKeyPress}
+        />
+        <Button onClick={handleAnalyze} />
+      </div >
       {error && <div className="error-message">{error}</div>}
-      <Button onClick={handleAnalyze} />
-    </div>
+    </div >
   );
 }

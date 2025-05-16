@@ -1,18 +1,23 @@
 .paragraph {
   display: flex;
-  flex-direction: column; /* Элементы вертикально */
-  align-items: center;    /* Центр по горизонтали */
-  justify-content: center; /* Начинаем сверху */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   min-height: 75vh;
-  padding: 1rem;
-  gap: 2rem; /* Равные отступы между элементами */
-  text-align: left; /* Центр текста внутри элементов */
+  gap: 2rem;
+  text-align: left;
   width: 100%;
-  max-width: 50rem; /* Ограничение ширины */
-  margin: 50%; /* Авто-отступы по бокам */
+  max-width: 50rem;
   margin-top: 1rem;
-  }
+  margin: auto;
+  color: var(--text-color);
+}
 
-body{
-  overflow: hidden;
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0 1rem;
 }
