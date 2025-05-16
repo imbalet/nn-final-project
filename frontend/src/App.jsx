@@ -22,7 +22,7 @@ function Home() {
     <div>
       <Header />
       <div className='paragraph'>
-        <h2>Summary AI кратко перескажет видео c YouTube</h2>
+        <h1>Summary AI кратко перескажет видео c YouTube</h1>
         <TextAreaWithButton />
       </div>
       <Footer />
