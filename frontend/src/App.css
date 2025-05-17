@@ -21,3 +21,15 @@
   min-height: 100vh;
   margin: 0 1rem;
 }
+
+/* Для десктопа */
+.main-title {
+  font-size: 2rem; /* или ваш текущий размер */
+}
+
+/* Для мобилок */
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 1.7rem; 
+  }
+}

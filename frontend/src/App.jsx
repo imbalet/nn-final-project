@@ -21,7 +21,7 @@ function Home() {
     <div className='app-container'>
       <Header />
       <div className='paragraph'>
-        <h1>Summary AI кратко перескажет видео c YouTube</h1>
+        <h1 className="main-title">Summary AI кратко перескажет видео c YouTube</h1>
         <TextAreaWithButton />
       </div>
       <Footer />
