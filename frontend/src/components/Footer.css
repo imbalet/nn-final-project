@@ -9,3 +9,11 @@
     margin-top: 2.4rem;
     color: var(--text-color);
 }
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 1rem 0; /* 1rem сверху и снизу, 0 слева и справа */
+    justify-content: space-between;
+  }
+
+}

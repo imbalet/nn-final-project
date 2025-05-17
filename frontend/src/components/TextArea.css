@@ -17,3 +17,10 @@
   outline: none;
   color: var(--text-color);
 }
+
+@media (max-width: 768px) {
+  .textarea-text {
+    font-size: 1.1rem; 
+    padding: 0.7rem 0.9rem; 
+  }
+}
